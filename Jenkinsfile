@@ -1,5 +1,10 @@
 pipeline {
-  agent { label 'docker-agent' }
+  agent { 
+    label {
+        label 'docker-agent'
+        cloud 'swarm-cloud'
+    } 
+  }
   environment {
     APP_NAME = 'app'
     CANARY_APP_NAME = 'app-canary'
