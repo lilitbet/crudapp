@@ -1,8 +1,7 @@
 pipeline {
   agent {
         label 'docker-agent'
-        cloud 'swarm-cloud'
-    } 
+        cloud 'swarm-cloud' 
   }
   environment {
     APP_NAME = 'app'
