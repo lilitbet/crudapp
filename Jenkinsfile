@@ -1,6 +1,5 @@
 pipeline {
-  agent { 
-    label {
+  agent {
         label 'docker-agent'
         cloud 'swarm-cloud'
     } 
