@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+  web-server:
+    image: lilitbet/crudback
+    restart: always
+    ports:
+      - "8080:80"
+      - "443:443"
+    depends_on:
+      - db
+      - phpmyadmin
+  db:
+    image: lilitbet/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'notepaddb'
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2.1
+    restart: always
+    environment:
+      PMA_HOST: 'db'
+      PMA_USER: 'root'
+      PMA_PASSWORD: 'root'
+    ports:
+      - "5000:80"
+    deploy:
+       mode: replicated
+       replicas: 1
+       placement:
+         constraints:
+           - node.hostname == master
+volumes:
+  mysql-data:
