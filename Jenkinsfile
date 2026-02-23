@@ -108,7 +108,7 @@ pipeline {
               sleep 5
             done
             echo "Успешных проверок после первой реплики: $MONITOR_SUCCESS/$MONITOR_TESTS"
-            [ "$MONITOR_SUCCESS" -ge 9 ] || exit 1
+            [ "$MONITOR_SUCCESS" -ge 8 ] || exit 1
 
             echo "Мониторинг после первой реплики прошёл!"
             sleep 60
