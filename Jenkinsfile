@@ -65,7 +65,7 @@ pipeline {
             else
               echo "✗ Тест $i: нет ответа"
             fi
-            sleep 4
+            sleep 6
           done
           echo "Успешных тестов: $SUCCESS/$TESTS"
           [ "$SUCCESS" -ge 8 ] || exit 1
