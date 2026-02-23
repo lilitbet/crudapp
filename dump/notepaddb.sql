@@ -35,14 +35,6 @@ CREATE TABLE `pages` (
   `text` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Дамп данных таблицы `pages`
---
-
-INSERT INTO `pages` (`id`, `userId`, `title`, `text_crop`, `text`) VALUES
-(2, 3, 'Дневник. День 2', 'Но постоянное информационно-пропагандистское обеспечение нашей деятельности однозначно фиксирует нео...', 'Но постоянное информационно-пропагандистское обеспечение нашей деятельности однозначно фиксирует необходимость своевременного выполнения сверхзадачи. А также некоторые особенности внутренней политики, которые представляют собой яркий пример континентально-европейского типа политической культуры, будут смешаны с не уникальными данными до степени совершенной неузнаваемости, из-за чего возрастает их статус бесполезности. В рамках спецификации современных стандартов, реплицированные с зарубежных источников, современные исследования набирают популярность среди определенных слоев населения, а значит, должны быть разоблачены. Наше дело не так однозначно, как может показаться: существующая теория предоставляет широкие возможности для соответствующих условий активизации. Господа, высококачественный прототип будущего проекта предоставляет широкие возможности для вывода текущих активов. В своём стремлении повысить качество жизни, они забывают, что перспективное планирование создаёт необходимость включения в производственный план целого ряда внеочередных мероприятий с учётом комплекса системы обучения кадров, соответствующей насущным потребностям.'),
-(3, 1, ' ^*$#Err&^*%_#*%*^&^*)(404$*^&%*^#@%$%$', 'Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake...', 'Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! Wake up, Neo!!! '),
-(4, 3, 'Крутяк', 'Ништяк!!!', 'Ништяк!!!');
 
 -- --------------------------------------------------------
 
@@ -63,10 +55,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `Surname`, `name`, `login`, `password`) VALUES
-(1, 'Чернуха', 'Александр', 'Greenrider1337', 'root1234'),
-(2, 'Бетхемян', 'Лилит', 'root', '1234'),
-(3, 'Чарьянц', 'Нина', 'Dxrkness', '1234'),
-(4, 'Попов', 'Иван', 'DDD_2024', '1234');
+(1, 'Бетхемян', 'Лилит', 'root', '1234');
 
 --
 -- Индексы сохранённых таблиц
@@ -93,13 +82,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
