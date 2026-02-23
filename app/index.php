@@ -37,7 +37,7 @@ if (empty($_SESSION['name']))
       </ul>
     </header>
 
-    <div class="container text-center"><h2>Список pfvtnjr</h2></div>	
+    <div class="container text-center"><h2>Список заметок</h2></div>	
 
     <div class="container border rounded shadow p-3 mb-5 bg-body-tertiary" style="min-height: 80vh;">
 			<?php 
@@ -87,4 +87,5 @@ if (empty($_SESSION['name']))
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
   </body>
 </html>
+
 
