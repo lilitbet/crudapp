@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- База данных: `notepaddb`
 --
+CREATE DATABASE IF NOT EXISTS `notepaddb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `notepaddb`;
 
 -- --------------------------------------------------------
 
