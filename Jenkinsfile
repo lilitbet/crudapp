@@ -18,7 +18,7 @@ pipeline {
       }
     }
 
-    // ВАРИАНТ С ПРОСТЫМИ РЕГУЛЯРНЫМИ ВЫРАЖЕНИЯМИ
+        // ПРОВЕРКА REQUIRED ДЛЯ ВАШЕГО ФАЙЛА
     stage('Validate Required Attributes') {
       steps {
         script {
@@ -29,35 +29,59 @@ pipeline {
           }
           
           def content = readFile(PHP_FILE)
+          def lines = content.readLines()
           def hasErrors = false
+          def lineNumber = 0
           
-          // Находим все input теги (регистронезависимо)
-          def inputPattern = ~/(?i)<input[^>]*>/
-          def matcher = content =~ inputPattern
+          println "=" * 50
+          println "АНАЛИЗ ФАЙЛА: ${PHP_FILE}"
+          println "=" * 50
           
-          matcher.each { match ->
-            def input = match[0]
-            def lowerInput = input.toLowerCase()
+          for (line in lines) {
+            lineNumber++
             
-            // Пропускаем скрытые поля и кнопки
-            if (!lowerInput.contains('type="hidden"') && 
-                !lowerInput.contains('type="submit"') && 
-                !lowerInput.contains('type="button"') && 
-                !lowerInput.contains('type="reset"') && 
-                !lowerInput.contains('type="image"')) {
+            // Ищем input теги
+            if (line.toLowerCase().contains('<input')) {
+              def lowerLine = line.toLowerCase()
+              
+              // Определяем тип поля (если указан)
+              def fieldType = "unknown"
+              if (lowerLine.contains('type="text"')) fieldType = "text"
+              else if (lowerLine.contains('type="password"')) fieldType = "password"
+              else if (lowerLine.contains('type="hidden"')) fieldType = "hidden"
+              else if (lowerLine.contains('type="submit"')) fieldType = "submit"
+              else if (lowerLine.contains('type="button"')) fieldType = "button"
+              else if (lowerLine.contains('type="reset"')) fieldType = "reset"
+              else if (lowerLine.contains('type="image"')) fieldType = "image"
               
               // Проверяем наличие required
-              if (!lowerInput.contains('required')) {
-                echo "❌ Поле без required: ${input.substring(0, Math.min(100, input.length()))}"
-                hasErrors = true
+              def hasRequired = lowerLine.contains('required')
+              
+              // Для отладки выводим информацию о каждом поле
+              println "Строка ${lineNumber}: [${fieldType}] ${hasRequired ? '✅' : '❌'} ${line.trim().substring(0, Math.min(70, line.trim().length()))}"
+              
+              // Проверяем только поля, которые ДОЛЖНЫ иметь required
+              // (не проверяем hidden, submit, button, reset, image)
+              if (!lowerLine.contains('type="hidden"') && 
+                  !lowerLine.contains('type="submit"') && 
+                  !lowerLine.contains('type="button"') && 
+                  !lowerLine.contains('type="reset"') && 
+                  !lowerLine.contains('type="image"')) {
+                
+                if (!hasRequired) {
+                  println "  ⚠️ ВАЖНОЕ ПОЛЕ БЕЗ REQUIRED!"
+                  hasErrors = true
+                }
               }
             }
           }
           
+          println "=" * 50
+          
           if (hasErrors) {
-            error "Найдены поля input без атрибута required!"
+            error "❌ ОШИБКА: Найдены важные поля input без атрибута required!"
           } else {
-            echo "✅ Все поля имеют required"
+            echo "✅ УСПЕХ: Все важные поля имеют атрибут required"
           }
         }
       }
