@@ -24,22 +24,22 @@
 			<form action="regist_control.php" method="get">
 			  <div class="mb-3 mt-4 ms-5 me-5">
 			    <label for="exampleInputEmail1" class="form-label">Новый логин</label>
-			    <input type="text" class="form-control border border-1 border-primary text-center" required placeholder="Введите логин" id="exampleInputEmail1" aria-describedby="emailHelp" name="log">
+			    <input type="text" class="form-control border border-1 border-primary text-center" placeholder="Введите логин" id="exampleInputEmail1" aria-describedby="emailHelp" name="log" required>
 			    <div id="passwordHelpBlock" class="form-text">
 	  			Например: L0gIn_12345
 					</div>
 			  </div>
 			  <div class="mb-3 ms-5 me-5">
 			    <label for="exampleInputPassword1" class="form-label">Новый пароль</label>
-			    <input type="password" class="form-control border border-1 border-primary text-center" required placeholder="Введите пароль" id="exampleInputPassword1" name="pass">
+			    <input type="password" class="form-control border border-1 border-primary text-center" placeholder="Введите пароль" id="exampleInputPassword1" name="pass" required>
 			  </div>
 			  <div class="mb-3 ms-5 me-5">
 			    <label for="exampleInputPassword1" class="form-label">Фамилия</label>
-			    <input type="text" class="form-control border border-1 border-primary text-center" placeholder="Заполните фамилию (необязательно)" id="exampleInputPassword1" name="sur" required pattern="[A-Za-zА-Яа-яЁё\-']{2,50}">
+			    <input type="text" class="form-control border border-1 border-primary text-center" placeholder="Заполните фамилию (необязательно)" id="exampleInputPassword1" name="sur" pattern="[A-Za-zА-Яа-яЁё\-']{2,50}" required>
 			  </div>
 			  <div class="mb-3 ms-5 me-5">
 			    <label for="exampleInputPassword1" class="form-label">Имя</label>
-			    <input type="text" class="form-control border border-1 border-primary text-center" placeholder="Заполните имя" required id="exampleInputPassword1" name="name">
+			    <input type="text" class="form-control border border-1 border-primary text-center" placeholder="Заполните имя" id="exampleInputPassword1" name="name" required>
 			  </div>
 			  <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
 			</form>
@@ -53,5 +53,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
   </body>
 </html>
+
 
 
