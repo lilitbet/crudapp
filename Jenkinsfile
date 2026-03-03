@@ -8,7 +8,7 @@ pipeline {
     BACKEND_IMAGE_NAME = 'crudback'
     DATABASE_IMAGE_NAME = 'mysql'
     MANAGER_IP = '192.168.0.1'
-    PHP_FILE = 'regist.php'
+    PHP_FILE = 'app/regist.php'
   }
 
   stages {
