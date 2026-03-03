@@ -17,54 +17,76 @@ pipeline {
         git url: "${GIT_REPO}", branch: 'main'
       }
     }
+
+    // ИСПРАВЛЕННЫЙ ЭТАП: Проверка required атрибутов в regist.php
     stage('Validate Required Attributes') {
-    steps {
+      steps {
         script {
-          echo "=== Проверка атрибутов ввода ==="
+          echo "=== Проверка атрибута required в файле ${PHP_FILE} ==="
           
           // Проверяем существование файла
           if (!fileExists(PHP_FILE)) {
             error "Файл ${PHP_FILE} не найден!"
-            exit 1
           }
           
           // Читаем содержимое файла
           def content = readFile(PHP_FILE)
           
-          // Находим все input поля
-          def inputPattern = /<input\b[^>]*>/i
-          def inputs = (content =~ inputPattern)
+          // Находим все input поля (исправленное регулярное выражение)
+          def inputPattern = '<input\\b[^>]*>'
+          def inputs = (content =~ /$inputPattern/i)
           
           def missingRequired = []
           def totalInputs = 0
+          def skippedInputs = 0
           
           // Проверяем каждое поле
-          inputs.each { input ->
+          for (input in inputs) {
             totalInputs++
-            // Пропускаем скрытые поля и кнопки (для них required не обязателен)
-            def isHiddenOrButton = (input =~ /type=["']?(hidden|submit|button|reset|image)["']?/i)
             
-            if (!isHiddenOrButton) {
-              if (!(input =~ /\srequired\b/i)) {
-                missingRequired.add(input.trim())
-              }
+            // Проверяем, является ли поле hidden, submit, button, reset или image
+            // Используем отдельное регулярное выражение без модификатора в строке
+            def skipPattern = 'type=["\']?(hidden|submit|button|reset|image)["\']?'
+            def matcher = (input =~ /$skipPattern/i)
+            
+            if (matcher.find()) {
+              skippedInputs++
+              echo "Пропущено поле (${matcher[0][1]}): ${input.substring(0, Math.min(50, input.length()))}..."
+              continue
+            }
+            
+            // Проверяем наличие атрибута required
+            def requiredPattern = '\\srequired\\b'
+            if (!(input =~ /$requiredPattern/i)) {
+              missingRequired.add(input.trim())
+              echo "❌ Поле без required: ${input.substring(0, Math.min(50, input.length()))}..."
             }
           }
           
-          // Выводим детальную информацию
+          // Выводим статистику
+          echo "================================="
           echo "Всего найдено полей input: ${totalInputs}"
-          echo "Проверено полей (исключая hidden/button): ${totalInputs - (totalInputs - missingRequired.size())}"
+          echo "Пропущено (hidden/button и т.д.): ${skippedInputs}"
+          echo "Проверено полей: ${totalInputs - skippedInputs}"
+          echo "Поля с required: ${(totalInputs - skippedInputs) - missingRequired.size()}"
+          echo "Поля без required: ${missingRequired.size()}"
+          echo "================================="
           
           // Создаем отчет
+          def reportFile = 'required-check-report.txt'
           def reportContent = """
-            === ОТЧЕТ ПРОВЕРКИ REQUIRED ===
-            Файл: ${PHP_FILE}
-            Время: ${new Date()}
-            
-            Всего полей input: ${totalInputs}
-            Поля с required: ${totalInputs - missingRequired.size()}
-            Поля без required: ${missingRequired.size()}
-          """
+=== ОТЧЕТ ПРОВЕРКИ REQUIRED ===
+Файл: ${PHP_FILE}
+Время: ${new Date()}
+Build: ${BUILD_NUMBER}
+
+Статистика:
+- Всего полей input: ${totalInputs}
+- Пропущено (hidden/button): ${skippedInputs}
+- Проверено полей: ${totalInputs - skippedInputs}
+- Поля с required: ${(totalInputs - skippedInputs) - missingRequired.size()}
+- Поля без required: ${missingRequired.size()}
+"""
           
           if (missingRequired.size() > 0) {
             reportContent += "\n\nСписок полей БЕЗ атрибута required:\n"
@@ -72,18 +94,27 @@ pipeline {
               reportContent += "${index + 1}. ${input}\n"
             }
             
+            // Сохраняем отчет
+            writeFile file: reportFile, text: reportContent
             echo reportContent
+            
+            // Показываем отчет в Jenkins
+            archiveArtifacts artifacts: reportFile, fingerprint: true
+            
             currentBuild.result = 'UNSTABLE'
-            error "Найдено ${missingRequired.size()} полей ввода без атрибута required!"
+            error "Найдено ${missingRequired.size()} полей ввода без атрибута required! Отчет сохранен в ${reportFile}"
           } else {
             reportContent += "\n\n✅ ВСЕ ПОЛЯ ИМЕЮТ АТРИБУТ REQUIRED!"
+            
+            // Сохраняем отчет
+            writeFile file: reportFile, text: reportContent
             echo reportContent
+            
             echo "✓ Проверка required пройдена успешно!"
           }
         }
       }
     }
-    
 
     stage('Build Docker Images') {
       steps {
