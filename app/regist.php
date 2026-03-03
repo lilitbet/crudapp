@@ -35,7 +35,7 @@
 			  </div>
 			  <div class="mb-3 ms-5 me-5">
 			    <label for="exampleInputPassword1" class="form-label">Фамилия</label>
-			    <input type="text" class="form-control border border-1 border-primary text-center" placeholder="Заполните фамилию (необязательно)" id="exampleInputPassword1" name="sur" required>
+			    <input type="text" class="form-control border border-1 border-primary text-center" placeholder="Заполните фамилию (необязательно)" id="exampleInputPassword1" name="sur" required pattern="[A-Za-zА-Яа-яЁё\-']{2,50}">
 			  </div>
 			  <div class="mb-3 ms-5 me-5">
 			    <label for="exampleInputPassword1" class="form-label">Имя</label>
@@ -53,4 +53,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
   </body>
 </html>
+
 
