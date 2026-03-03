@@ -57,9 +57,6 @@ pipeline {
               // Проверяем наличие required
               def hasRequired = lowerLine.contains('required')
               
-              // Для отладки выводим информацию о каждом поле
-              println "Строка ${lineNumber}: [${fieldType}] ${hasRequired ? '✅' : '❌'} ${line.trim().substring(0, Math.min(70, line.trim().length()))}"
-              
               // Проверяем только поля, которые ДОЛЖНЫ иметь required
               // (не проверяем hidden, submit, button, reset, image)
               if (!lowerLine.contains('type="hidden"') && 
@@ -69,7 +66,7 @@ pipeline {
                   !lowerLine.contains('type="image"')) {
                 
                 if (!hasRequired) {
-                  println "  ⚠️ ВАЖНОЕ ПОЛЕ БЕЗ REQUIRED!"
+                  println "Найдено необязательное поле"
                   hasErrors = true
                 }
               }
@@ -79,9 +76,9 @@ pipeline {
           println "=" * 50
           
           if (hasErrors) {
-            error "❌ ОШИБКА: Найдены важные поля input без атрибута required!"
+            error "❌ ОШИБКА: Найдены поля без атрибута required!"
           } else {
-            echo "✅ УСПЕХ: Все важные поля имеют атрибут required"
+            echo "✅ УСПЕХ: Все поля обязательные"
           }
         }
       }
