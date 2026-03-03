@@ -18,7 +18,7 @@ pipeline {
       }
     }
 
-    // МИНИМАЛИСТИЧНЫЙ ВАРИАНТ
+    // ВАРИАНТ С ПРОСТЫМИ РЕГУЛЯРНЫМИ ВЫРАЖЕНИЯМИ
     stage('Validate Required Attributes') {
       steps {
         script {
@@ -30,18 +30,25 @@ pipeline {
           
           def content = readFile(PHP_FILE)
           def hasErrors = false
-          def lineNum = 0
           
-          content.eachLine { line, num ->
-            lineNum = num
-            if (line.contains('<input') && !line.toLowerCase().contains('required')) {
-              def lowerLine = line.toLowerCase()
-              if (!lowerLine.contains('type="hidden"') && 
-                  !lowerLine.contains('type="submit"') && 
-                  !lowerLine.contains('type="button"') && 
-                  !lowerLine.contains('type="reset"') && 
-                  !lowerLine.contains('type="image"')) {
-                println "❌ Строка ${lineNum}: ${line.trim()}"
+          // Находим все input теги (регистронезависимо)
+          def inputPattern = ~/(?i)<input[^>]*>/
+          def matcher = content =~ inputPattern
+          
+          matcher.each { match ->
+            def input = match[0]
+            def lowerInput = input.toLowerCase()
+            
+            // Пропускаем скрытые поля и кнопки
+            if (!lowerInput.contains('type="hidden"') && 
+                !lowerInput.contains('type="submit"') && 
+                !lowerInput.contains('type="button"') && 
+                !lowerInput.contains('type="reset"') && 
+                !lowerInput.contains('type="image"')) {
+              
+              // Проверяем наличие required
+              if (!lowerInput.contains('required')) {
+                echo "❌ Поле без required: ${input.substring(0, Math.min(100, input.length()))}"
                 hasErrors = true
               }
             }
