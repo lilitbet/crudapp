@@ -18,6 +18,7 @@ pipeline {
       }
     }
 
+        // ИСПРАВЛЕННЫЙ ЭТАП: Проверка required атрибутов в regist.php
     stage('Validate Required Attributes') {
       steps {
         script {
@@ -31,13 +32,24 @@ pipeline {
           // Читаем содержимое файла
           def content = readFile(PHP_FILE)
           
-          // Находим все input поля
+          // Простой способ найти все input теги
           def inputs = []
-          def pattern = java.util.regex.Pattern.compile("<input[^>]*>", java.util.regex.Pattern.CASE_INSENSITIVE)
-          def matcher = pattern.matcher(content)
+          def index = 0
           
-          while (matcher.find()) {
-            inputs.add(matcher.group())
+          while (true) {
+            def startTag = content.indexOf('<input', index)
+            if (startTag == -1) {
+              startTag = content.indexOf('<INPUT', index)
+              if (startTag == -1) break
+            }
+            
+            def endTag = content.indexOf('>', startTag)
+            if (endTag == -1) break
+            
+            def inputTag = content.substring(startTag, endTag + 1)
+            inputs.add(inputTag)
+            
+            index = endTag + 1
           }
           
           def missingRequired = []
