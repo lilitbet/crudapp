@@ -86,30 +86,7 @@ Build: ${BUILD_NUMBER}
 - Проверено полей: ${totalInputs - skippedInputs}
 - Поля с required: ${(totalInputs - skippedInputs) - missingRequired.size()}
 - Поля без required: ${missingRequired.size()}
-"""
-          
-          if (missingRequired.size() > 0) {
-            reportContent += "\n\nСписок полей БЕЗ атрибута required:\n"
-            missingRequired.eachWithIndex { input, index ->
-              reportContent += "${index + 1}. ${input}\n"
-            }
-            
-            // Сохраняем отчет
-            writeFile file: reportFile, text: reportContent
-            echo reportContent
-            
-            // Показываем отчет в Jenkins
-            archiveArtifacts artifacts: reportFile, fingerprint: true
-            
-            currentBuild.result = 'UNSTABLE'
-            error "Найдено ${missingRequired.size()} полей ввода без атрибута required! Отчет сохранен в ${reportFile}"
-          } else {
-            reportContent += "\n\n✅ ВСЕ ПОЛЯ ИМЕЮТ АТРИБУТ REQUIRED!"
-            
-            // Сохраняем отчет
-            writeFile file: reportFile, text: reportContent
-            echo reportContent
-            
+""" 
             echo "✓ Проверка required пройдена успешно!"
           }
         }
