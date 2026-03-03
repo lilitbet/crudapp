@@ -8,6 +8,7 @@ pipeline {
     BACKEND_IMAGE_NAME = 'crudback'
     DATABASE_IMAGE_NAME = 'mysql'
     MANAGER_IP = '192.168.0.1'
+    PHP_FILE = 'regist.php'
   }
 
   stages {
@@ -16,6 +17,73 @@ pipeline {
         git url: "${GIT_REPO}", branch: 'main'
       }
     }
+    stage('Validate Required Attributes') {
+    steps {
+        script {
+          echo "=== Проверка атрибутов ввода ==="
+          
+          // Проверяем существование файла
+          if (!fileExists(PHP_FILE)) {
+            error "Файл ${PHP_FILE} не найден!"
+            exit 1
+          }
+          
+          // Читаем содержимое файла
+          def content = readFile(PHP_FILE)
+          
+          // Находим все input поля
+          def inputPattern = /<input\b[^>]*>/i
+          def inputs = (content =~ inputPattern)
+          
+          def missingRequired = []
+          def totalInputs = 0
+          
+          // Проверяем каждое поле
+          inputs.each { input ->
+            totalInputs++
+            // Пропускаем скрытые поля и кнопки (для них required не обязателен)
+            def isHiddenOrButton = (input =~ /type=["']?(hidden|submit|button|reset|image)["']?/i)
+            
+            if (!isHiddenOrButton) {
+              if (!(input =~ /\srequired\b/i)) {
+                missingRequired.add(input.trim())
+              }
+            }
+          }
+          
+          // Выводим детальную информацию
+          echo "Всего найдено полей input: ${totalInputs}"
+          echo "Проверено полей (исключая hidden/button): ${totalInputs - (totalInputs - missingRequired.size())}"
+          
+          // Создаем отчет
+          def reportContent = """
+            === ОТЧЕТ ПРОВЕРКИ REQUIRED ===
+            Файл: ${PHP_FILE}
+            Время: ${new Date()}
+            
+            Всего полей input: ${totalInputs}
+            Поля с required: ${totalInputs - missingRequired.size()}
+            Поля без required: ${missingRequired.size()}
+          """
+          
+          if (missingRequired.size() > 0) {
+            reportContent += "\n\nСписок полей БЕЗ атрибута required:\n"
+            missingRequired.eachWithIndex { input, index ->
+              reportContent += "${index + 1}. ${input}\n"
+            }
+            
+            echo reportContent
+            currentBuild.result = 'UNSTABLE'
+            error "Найдено ${missingRequired.size()} полей ввода без атрибута required!"
+          } else {
+            reportContent += "\n\n✅ ВСЕ ПОЛЯ ИМЕЮТ АТРИБУТ REQUIRED!"
+            echo reportContent
+            echo "✓ Проверка required пройдена успешно!"
+          }
+        }
+      }
+    }
+    
 
     stage('Build Docker Images') {
       steps {
