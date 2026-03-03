@@ -18,7 +18,6 @@ pipeline {
       }
     }
 
-    // ИСПРАВЛЕННЫЙ ЭТАП: Проверка required атрибутов в regist.php
     stage('Validate Required Attributes') {
       steps {
         script {
@@ -32,38 +31,51 @@ pipeline {
           // Читаем содержимое файла
           def content = readFile(PHP_FILE)
           
-          // Находим все input поля (исправленное регулярное выражение)
-          def inputPattern = '<input\\b[^>]*>'
-          def inputs = (content =~ /$inputPattern/i)
+          // Находим все input поля
+          def inputs = []
+          def pattern = java.util.regex.Pattern.compile("<input[^>]*>", java.util.regex.Pattern.CASE_INSENSITIVE)
+          def matcher = pattern.matcher(content)
+          
+          while (matcher.find()) {
+            inputs.add(matcher.group())
+          }
           
           def missingRequired = []
-          def totalInputs = 0
+          def totalInputs = inputs.size()
           def skippedInputs = 0
           
+          echo "Найдено полей input: ${totalInputs}"
+          
           // Проверяем каждое поле
-          for (input in inputs) {
-            totalInputs++
+          inputs.each { input ->
+            def lowerInput = input.toLowerCase()
             
-            // Проверяем, является ли поле hidden, submit, button, reset или image
-            // Используем отдельное регулярное выражение без модификатора в строке
-            def skipPattern = 'type=["\']?(hidden|submit|button|reset|image)["\']?'
-            def matcher = (input =~ /$skipPattern/i)
-            
-            if (matcher.find()) {
+            // Пропускаем скрытые поля и кнопки
+            if (lowerInput.contains('type="hidden"') || 
+                lowerInput.contains('type="submit"') || 
+                lowerInput.contains('type="button"') || 
+                lowerInput.contains('type="reset"') || 
+                lowerInput.contains('type="image"') ||
+                lowerInput.contains("type='hidden'") || 
+                lowerInput.contains("type='submit'") || 
+                lowerInput.contains("type='button'") || 
+                lowerInput.contains("type='reset'") || 
+                lowerInput.contains("type='image'")) {
               skippedInputs++
-              echo "Пропущено поле (${matcher[0][1]}): ${input.substring(0, Math.min(50, input.length()))}..."
-              continue
+              echo "Пропущено поле (type): ${input.substring(0, Math.min(50, input.length()))}..."
+              return
             }
             
-            // Проверяем наличие атрибута required
-            def requiredPattern = '\\srequired\\b'
-            if (!(input =~ /$requiredPattern/i)) {
-              missingRequired.add(input.trim())
-              echo "❌ Поле без required: ${input.substring(0, Math.min(50, input.length()))}..."
+            // Проверяем наличие required
+            if (!lowerInput.contains('required') && !lowerInput.contains('required=')) {
+              missingRequired.add(input)
+              echo "❌ Найдено поле без required: ${input.substring(0, Math.min(50, input.length()))}..."
             }
           }
           
           // Выводим статистику
+          echo "================================="
+          echo "РЕЗУЛЬТАТЫ ПРОВЕРКИ:"
           echo "================================="
           echo "Всего найдено полей input: ${totalInputs}"
           echo "Пропущено (hidden/button и т.д.): ${skippedInputs}"
@@ -72,22 +84,16 @@ pipeline {
           echo "Поля без required: ${missingRequired.size()}"
           echo "================================="
           
-          // Создаем отчет
-          def reportFile = 'required-check-report.txt'
-          def reportContent = """
-=== ОТЧЕТ ПРОВЕРКИ REQUIRED ===
-Файл: ${PHP_FILE}
-Время: ${new Date()}
-Build: ${BUILD_NUMBER}
-
-Статистика:
-- Всего полей input: ${totalInputs}
-- Пропущено (hidden/button): ${skippedInputs}
-- Проверено полей: ${totalInputs - skippedInputs}
-- Поля с required: ${(totalInputs - skippedInputs) - missingRequired.size()}
-- Поля без required: ${missingRequired.size()}
-""" 
-            echo "✓ Проверка required пройдена успешно!"
+          // Если есть поля без required - останавливаем pipeline
+          if (missingRequired.size() > 0) {
+            echo "❌ ОШИБКА: Найдено ${missingRequired.size()} полей ввода без атрибута required!"
+            echo "Список проблемных полей:"
+            missingRequired.eachWithIndex { input, index ->
+              echo "  ${index + 1}. ${input}"
+            }
+            error "Проверка required не пройдена! Найдены поля без атрибута required."
+          } else {
+            echo "✅ Проверка required пройдена успешно! Все поля имеют атрибут required."
           }
         }
       }
