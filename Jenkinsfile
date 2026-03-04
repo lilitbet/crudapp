@@ -84,6 +84,26 @@ pipeline {
       }
     }
 
+    //проверка на кол-во 2 таблиц в бд
+    stage('Check DB Tables') {
+  steps {
+    sh '''
+      echo "Проверка таблиц в базе notepaddb"
+
+      TABLES=$(docker exec crudapp_db_1 mysql -u root -proot -D notepaddb -e "SHOW TABLES;" | wc -l)
+      TABLES=$((TABLES - 1))
+
+      echo "Найдено таблиц: $TABLES"
+
+      if [ "$TABLES" -ne 2 ]; then
+        echo "Ошибка: должно быть ровно 2 таблицы"
+        exit 1
+      fi
+
+      echo "Проверка пройдена"
+    '''
+  }
+}
     stage('Build Docker Images') {
       steps {
         sh "docker build -f php.Dockerfile . -t ${DOCKER_HUB_USER}/${BACKEND_IMAGE_NAME}:${BUILD_NUMBER}"
